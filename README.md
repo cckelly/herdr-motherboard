@@ -1,7 +1,7 @@
 <h1 align="center">Motherboard</h1>
 
 <p align="center">
-  <b>Watch your AI agents work, as chips running around an ASCII motherboard.</b><br>
+  <b>Watch your AI agents work, visualized on an ASCII motherboard.</b><br>
   A mod for the <a href="https://herdr.dev">Herdr</a> app.
 </p>
 
