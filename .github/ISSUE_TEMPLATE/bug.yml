@@ -1,0 +1,42 @@
+name: Bug
+description: Something on the board looks or behaves wrong.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what you saw instead. A screenshot helps a lot.
+    validations:
+      required: true
+  - type: input
+    id: herdr
+    attributes:
+      label: Herdr version
+      description: The output of `herdr-app --version`.
+      placeholder: herdr-app 0.1.16
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options: [macOS, Linux, Windows, Other]
+    validations:
+      required: true
+  - type: input
+    id: agents
+    attributes:
+      label: Agents involved
+      description: Which agents were on the board when it happened (Claude Code, Codex, OpenCode, pi, …), and whether any ran on another machine.
+  - type: input
+    id: view
+    attributes:
+      label: View and options
+      description: Board, iso, scope or all machines, and any options you changed (theme, labels, names, motion).
+  - type: textarea
+    id: errors
+    attributes:
+      label: Errors
+      description: Anything under `errors` in `herdr-app status`, or the warnings in the theme menu.
+      render: text

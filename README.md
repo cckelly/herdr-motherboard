@@ -145,9 +145,10 @@ It runs `hc read` on an agent whose card is open. It types into an agent's termi
 `hc keys`) only when you send a message or pick an answer in its card. The full list is under
 "What it runs and reads" in [RECIPE.md](RECIPE.md).
 
-## Development
+## Contributing
 
-`node --test mods/herdr-motherboard/test/*.test.mjs` (Node 22 or later).
+Bug reports, ideas, themes and pull requests are welcome. [CONTRIBUTING.md](CONTRIBUTING.md) has
+the dev loop (`node scripts/dev.mjs` hot-reloads the board from your clone) and how to test.
 
 Built and tested on Herdr 0.1.16 on macOS; the tests also pass on Linux. Windows support is
 written and unit-tested but hasn't run on a real Windows machine yet.

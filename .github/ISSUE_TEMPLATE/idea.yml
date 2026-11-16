@@ -1,0 +1,16 @@
+name: Idea
+description: Something the board could show or do.
+labels: [idea]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: What you'd like, and what it would help you notice or do.
+    validations:
+      required: true
+  - type: textarea
+    id: where
+    attributes:
+      label: Where it would go
+      description: Optional. Which component, view or menu, or a sketch.
