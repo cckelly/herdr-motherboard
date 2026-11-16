@@ -11,21 +11,21 @@ test("the default theme follows the active Herdr theme for every role", () => {
   const P = palette("herdr", defs(), active);
   assert.equal(P.bg, "#000000");
   assert.equal(P.cpu, active.ansi4);
-  assert.equal(P.chipBg, null);
+  assert.equal(P.agentBg, null);
   assert.deepEqual(P.warnings, []);
   for (const [role, [d]] of Object.entries(ROLES)) if (d) assert.ok(P[role], role);
 });
 
 test("a theme takes hex or Herdr color names, extends another, and can unset a role", () => {
   const base = parseTheme("base", JSON.stringify({ colors: { cpu: "#123456", ram: "ansi1" }, scanlines: true }));
-  const child = parseTheme("child", JSON.stringify({ extends: "base", colors: { ram: "#abc", chipBg: "#010203" } }));
+  const child = parseTheme("child", JSON.stringify({ extends: "base", colors: { ram: "#abc", agentBg: "#010203" } }));
   const P = palette("child", defs(base, child), active);
   assert.equal(P.cpu, "#123456");
   assert.equal(P.ram, "#abc");
-  assert.equal(P.chipBg, "#010203");
+  assert.equal(P.agentBg, "#010203");
   assert.equal(P.scan, true);
-  const off = palette("x", defs(parseTheme("x", JSON.stringify({ extends: "child", colors: { chipBg: null } })), base, child), active);
-  assert.equal(off.chipBg, null);
+  const off = palette("x", defs(parseTheme("x", JSON.stringify({ extends: "child", colors: { agentBg: null } })), base, child), active);
+  assert.equal(off.agentBg, null);
 });
 
 test("bad values fall back and are reported; bad files throw", () => {
@@ -83,7 +83,7 @@ test("every shipped theme parses cleanly and stays readable", async () => {
     assert.ok(contrast(P.text, P.bg) >= 7, `${id}: text`);
     assert.ok(contrast(P.muted, P.bg) >= 4.5, `${id}: muted`);
     for (const role of ["cpu", "ram", "nvme", "pch", "nic", "gpu", "bios", "panel", "tpm", "fault", "post", "lit"]) assert.ok(contrast(P[role], P.bg) >= 3, `${id}: ${role} ${contrast(P[role], P.bg).toFixed(2)}`);
-    const chip = P.chipBg ? [P.chipBg] : Object.values(P.programs);
-    for (const c of chip) assert.ok(contrast(P.chipFg, c) >= 4.5, `${id}: chip text on ${c}`);
+    const chip = P.agentBg ? [P.agentBg] : Object.values(P.programs);
+    for (const c of chip) assert.ok(contrast(P.agentFg, c) >= 4.5, `${id}: chip text on ${c}`);
   }
 });

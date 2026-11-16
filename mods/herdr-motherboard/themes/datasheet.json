@@ -5,7 +5,7 @@
     "frame": "#3a3832", "silk": "#8c877a", "trace": "#b8b2a4", "bus": "#3a3832", "deco": "#ddd8cb", "lit": "#d9480f",
     "cpu": "#1f5fbf", "ram": "#5b4bb7", "nvme": "#a3289a", "pch": "#0f7c74", "nic": "#2f8a2f", "gpu": "#b35c00",
     "bios": "#c92a2a", "panel": "#a87900", "tpm": "#c2410c", "fault": "#e03131", "post": "#2b8a3e", "remote": "#0b7285", "led": "#2b8a3e",
-    "working": "#1f5fbf", "chipFg": "#1d1d1b", "card": "#ffffff", "cardLine": "#c9c2b2"
+    "working": "#1f5fbf", "agentFg": "#1d1d1b", "card": "#ffffff", "cardLine": "#c9c2b2"
   },
   "programs": { "claude": "#f0a084", "codex": "#c3cbe0", "opencode": "#f5d27a", "pi": "#c4b8f7", "other": "#b9d4f5" }
 }

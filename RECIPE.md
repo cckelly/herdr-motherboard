@@ -1,7 +1,7 @@
 # herdr-motherboard
 
 Every agent Herdr knows about (Claude Code, Codex, OpenCode, pi, anything that reports a
-status) becomes a small chip on an ASCII motherboard. Chips travel along the data buses
+status) appears on an ASCII motherboard as a small labeled box. Agents travel along the data buses
 to the component that matches what the agent is doing: the CPU while it thinks, the PCH
 while it runs a command, the NIC for network commands, the NVMe while files change, BIOS
 when it needs your permission. One board per machine, an overview of all machines, a 3D
@@ -32,7 +32,7 @@ Top to bottom, in JetBrains Mono:
   - **All machines:** a card per machine (2 columns when the window is ≥ 1000 px wide):
     online dot, name, "open board ›", counts (working, need you, done, idle, error), and a
     3 × 3 grid of component cells (CPU, PCH, NIC / NVMe, PCIe, NEEDS YOU / FAULT, POST,
-    RAM) holding up to 3 mini chips each, then "+N more". Click a card to open its board.
+    RAM) holding up to 3 mini agents each, then "+N more". Click a card to open its board.
   - **board:** the flat motherboard, 104 × 25 cells, scaled to fit (6–16 px font; cell
     width 0.6 em, row height 1.32 em). Outlines are vector lines, 1 px, snapped to pixels;
     the board frame and both data buses are double lines. Components (x, y, w, h in cells):
@@ -62,18 +62,18 @@ Top to bottom, in JetBrains Mono:
     ("running", "permission", "login"…). CPU fins and a `(|)` fan, RAM sticks, `[RJ45]`,
     NAND `[]`. Buses are `====` rows with `/` pads, each on a row of its own.
   - **scope:** a logic analyzer. A time axis (ticks every 10 s / 30 s / 2 min for 1 / 3 /
-    10 minute spans, "now" at the right), then one channel per agent: space avatar, chip,
+    10 minute spans, "now" at the right), then one channel per agent: space avatar, agent name,
     space name and status on the left; a two-row ASCII trace on the right, raised while
     working, low while idle or done, hatched `x` while it needs you. Each stretch is named
     where its row is empty ("CPU · thinking" inside a raised one, "RAM · idle" above a low
     one). Under the channels, every component in its color with its meaning.
 - **Log bar** (toggle with `log`): the last 5 moves, "12:04:11 t3 → PCH  running vitest".
 
-**Chips** are colored by program (Claude `#e0896b`, Codex `#c9d1e3`, OpenCode
+**Agents** are colored by program (Claude `#e0896b`, Codex `#c9d1e3`, OpenCode
 `#f2c46d`, pi `#a99bf5`, Cursor `#8fd3c9`, Gemini `#8ab4f8`, Kiro `#b8e986`, Amp
 `#f5a3c7`, others `#b4befe`) with dark text, a 3 px stripe on the left in the agent's
 space color (the same color Herdr's sidebar gives the space), and a name. With `names:
-space` (the default) a chip is 7 cells wide and shows its space's name, cut to fit, plus the
+space` (the default) an agent is 7 cells wide and shows its space's name, cut to fit, plus the
 tab's number when another agent shares the space (`herdr 3`); with `names: address` it is 4
 cells and shows the Herdr terminal address (`t3`, `t1y`). Sub-agents always show their
 address. A status dot sits on the top-right
@@ -89,15 +89,15 @@ corner: working pulses, blocked blinks red, done green, idle grey.
   was there while it was idle) moves it to the PCH, or to the NIC when that process is a
   network command; files changing under its git repo move it to the NVMe for 4 s.
 - **Movement:** when an agent's component changes (after it has sat 800 ms, except for the
-  ones that need you), its chip walks the route: up or down its pad, along the bus, across
+  ones that need you), the agent walks the route: up or down its pad, along the bus, across
   a lane if it changes bus, to the new component's free slot, at 11 ms per column. The
   trace it walks lights up behind it and fades over 700 ms. `motion: reduced` slides
   straight there in 450 ms; `off` jumps.
 - **Crowding:** each component has fixed slots. When it's full, the last slot or two show
   "+N more"; hover or click that for a scrolling list of everyone there.
-- **Hover a chip** (board and iso, unless labels is `off`): its full card opens beside it,
-  once the pointer moves onto the chip (a chip sliding under a resting pointer doesn't open
-  one). It's for reading: it closes the moment the pointer leaves the chip. Click the chip to
+- **Hover an agent** (board and iso, unless labels is `off`): its full card opens beside it,
+  once the pointer moves onto the agent (an agent sliding under a resting pointer doesn't open
+  one). It's for reading: it closes the moment the pointer leaves the agent. Click the agent to
   keep it open and use it. The card: the agent, its program,
   status and how long, space avatar and name, machine, title, last message, what it's doing,
   folder, progress, why it's in that component when the board saw something Herdr didn't
@@ -105,12 +105,12 @@ corner: working pulses, blocked blinks red, done green, idle grey.
   agent" (or "▾ Answer · 3 choices" in red when it's blocked), over the inline part: the
   bottom of its screen (`hc read`, every 1.2 s) and a box to message it. Collapsed by default;
   the arrow expands that one agent's card only (`expanded` in settings, forgotten when the
-  agent ends). `short` prints space and activity under each chip; `full` adds a rail of every
-  agent on the right. Each row's badge reads like that agent's chip (`names`: space or address), and
+  agent ends). `short` prints space and activity under each agent; `full` adds a rail of every
+  agent on the right. Each row's badge reads like that agent on the board (`names`: space or address), and
   the line beside it gives the other. Rows tint (`theme.lit` at low alpha) under the pointer to show they're
   clickable, and the agent whose card is open has a stronger tint and a 3 px `theme.lit` bar
   on its left.
-- **Click a chip** (or a rail row, a scope channel, an overview mini chip; `r` for the
+- **Click an agent** (or a rail row, a scope channel, an overview mini agent; `r` for the
   selected one) keeps its card open after the pointer leaves (pinned; in the scope and the
   overview, this is the only way to get one, top right). Enter sends (`hc send`: pasted, then
   Enter), the box clears and a note says "Sent" or why not. A blocked agent shows its
@@ -124,9 +124,9 @@ corner: working pulses, blocked blinks red, done green, idle grey.
   number, then pastes the answer. "Cancel it (Esc)" presses Esc there. With no menu on its
   screen, the box sends text anyway (`--force`). The screen box then shows what's above the
   question (the command or diff being asked about). Demo agents get no box. The card stays
-  put while the chip moves, and pressing the chip pins it where it is; drag its header to
-  move it (that pins it too; double-click the header to put it back beside the chip). Every
-  card opens beside its chip. Drag its corner to resize it (min 340 × 260, remembered); ✕, Esc or a press outside closes it.
+  put while the agent moves, and pressing the agent pins it where it is; drag its header to
+  move it (that pins it too; double-click the header to put it back beside the agent). Every
+  card opens beside its agent. Drag its corner to resize it (min 340 × 260, remembered); ✕, Esc or a press outside closes it.
   There's no peek: the card covers it. Occupied
   components glow and pulse (fast for the ones that need you).
 - **Spaces menu:** All / None / This space, then each space with a checkbox, its avatar,
@@ -145,7 +145,7 @@ corner: working pulses, blocked blinks red, done green, idle grey.
 - **Keys** (pressing any control, or opening the window, gives the board the keyboard): `v`
   view menu, `l` labels menu, `m` motion menu, `n` names, `z` size, `a` / Backspace all
   machines, `d` demo, `c` next theme, `t` log, `f` spaces menu, `s` this
-  space only, `← →` select a chip, `r` message it, Enter focus it, `1`–`9` pick a blocked agent's choice (card
+  space only, `← →` select an agent, `r` message it, Enter focus it, `1`–`9` pick a blocked agent's choice (card
   expanded), `?` legend, Esc: close a menu, else the card, else the window. While typing in a card's
   box, every key is the box's except Esc.
 - **Global keys** (`keys.json`): `cmd-shift-m` / `ctrl-shift-m` toggles the window,
@@ -228,10 +228,10 @@ corner: working pulses, blocked blinks red, done green, idle grey.
   the board) sat over the card and swallowed the next click; without one, the next press just
   ends the drag.
 - Elements under the card still get hover and pointer-move events (nothing blocks them), so a
-  chip under the card ignores the pointer while `cardHover` is set; otherwise it takes the card
+  agent under the card ignores the pointer while `cardHover` is set; otherwise it takes the card
   over.
 - A pressed element doesn't count as hovered (`on_hover(false)` fires on the press), so a
-  chip pins its card on mouse down; waiting for the click let the hover card close first.
+  agent pins its card on mouse down; waiting for the click let the hover card close first.
 - Answering prompts: in Claude Code a choice's number picks it at once; "Type something."
   opens a field that a `hc send --force` then fills and submits (checked on Claude Code
   2.1.325). `hc keys <t> <n>` presses the number, `hc keys <t> esc` cancels.
@@ -252,7 +252,7 @@ corner: working pulses, blocked blinks red, done green, idle grey.
   install it under another name, change that and the names in `keys.json`.
 - Agents that never report a status to Herdr don't appear (a terminal running an agent
   program with no report shows in RAM).
-- Trails, glows and chip motion are native animations; a hidden copy (a pane in another tab)
+- Trails, glows and agent motion are native animations; a hidden copy (a pane in another tab)
   keeps polling processes.
 
 ## Done when
@@ -261,10 +261,10 @@ corner: working pulses, blocked blinks red, done green, idle grey.
 - `cmd-shift-m` opens the window with no entry in `herdr-app status` errors; `✕` and Esc
   close it.
 - An agent that starts working moves RAM → CPU along the bus with a lit trail; when it runs
-  `sleep 5` its chip moves to the PCH and the log says "running sleep".
+  `sleep 5` it moves to the PCH and the log says "running sleep".
 - Demo shows 7 agents across two machines, sub-agents in PCIe, and a blocked agent pulsing
   in BIOS; All machines shows one card per machine and each card opens its board.
-- Clicking the echo agent's chip pins its card with its screen; typing "hi" and Enter makes it
+- Clicking the echo agent pins its card with its screen; typing "hi" and Enter makes it
   answer "you said "hi"" on that screen; "allow" blocks it and the card lists Yes / Yes, and
   don't ask again / No as buttons, and pressing 1 makes it say "you picked 1. Yes"; "ask"
   then 4 ("Type something.") and "Purple" makes it say "you answered "Purple"".

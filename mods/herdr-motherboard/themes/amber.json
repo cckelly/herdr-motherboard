@@ -6,6 +6,6 @@
     "frame": "#6b4700", "silk": "#7a5200", "trace": "#4a3100", "bus": "#6b4700", "deco": "#3a2700", "lit": "#ffe0a3",
     "cpu": "#ffb000", "ram": "#d99600", "nvme": "#ffc233", "pch": "#ffb84d", "nic": "#ffcc66", "gpu": "#e6a200",
     "bios": "#ff4d2e", "panel": "#ff7a3d", "tpm": "#ff9e3d", "fault": "#ff3b30", "post": "#fff0c2", "remote": "#fff0c2", "led": "#ffcf5c",
-    "working": "#ffe0a3", "chipBg": "#2a1a00", "chipFg": "#ffc94d", "chipRing": "#b37a00", "card": "#120a00", "cardLine": "#6b4700"
+    "working": "#ffe0a3", "agentBg": "#2a1a00", "agentFg": "#ffc94d", "agentRing": "#b37a00", "card": "#120a00", "cardLine": "#6b4700"
   }
 }

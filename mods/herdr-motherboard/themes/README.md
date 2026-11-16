@@ -10,7 +10,7 @@ theme menu says why.
   "extends": "phosphor",
   "herdrTheme": "catppuccin-mocha",
   "scanlines": false,
-  "colors": { "cpu": "#89b4fa", "bios": "ansi1", "chipBg": null },
+  "colors": { "cpu": "#89b4fa", "bios": "ansi1", "agentBg": null },
   "programs": { "claude": "#ff9e64", "my-agent": "#9ece6a" }
 }
 ```
@@ -24,8 +24,8 @@ theme menu says why.
   (`background`, `foreground`, `muted`, `dim`, `border`, `input`, `chrome`, `popover`,
   `accent`, `working`, `blocked`, `done`, `idle`, `ansi0`..`ansi15`, …). `null` unsets a
   role that can be unset. Roles you leave out use the defaults below, which follow the Herdr theme.
-- **programs**: chip color per program, matched against the agent's program and app names
-  (`other` is everything else). Ignored while `chipBg` is set.
+- **programs**: agent color per program, matched against the agent's program and app names
+  (`other` is everything else). Ignored while `agentBg` is set.
 
 The theme menu's **Copy to a new theme** writes the current theme out with every role filled
 in, which is the easiest place to start.
@@ -60,6 +60,6 @@ in, which is the easiest place to start.
 | `working` | `working` | working counts |
 | `card` | `popover` | hover cards and menus |
 | `cardLine` | `border` | hover card and menu borders |
-| `chipBg` | unset | one color for every agent chip (unset: color chips by program) |
-| `chipFg` | `#11111b` | chip text |
-| `chipRing` | unset | chip outline (unset: none) |
+| `agentBg` | unset | one color for every agent (unset: color agents by program) |
+| `agentFg` | `#11111b` | agent text |
+| `agentRing` | unset | agent outline (unset: none) |

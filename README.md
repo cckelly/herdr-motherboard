@@ -16,15 +16,15 @@
   <img src="docs/board.gif" alt="Agents moving between components on the board" width="100%">
 </p>
 
-Every agent in Herdr (Claude Code, Codex, OpenCode, pi, anything that reports a status) becomes
-a chip on the board. When an agent starts thinking, its chip travels the bus to the **CPU**. When
+Every agent in Herdr (Claude Code, Codex, OpenCode, pi, anything that reports a status) shows
+up on the board. When an agent starts thinking, it travels the bus to the **CPU**. When
 it runs a command, it moves to the **PCH**. When it needs your permission, it lands in the
 **BIOS** and pulses until you answer. You can tell what a dozen agents are doing at a glance,
 without opening a single tab.
 
 - **See everything at once.** One board per machine, every agent on it, with what each is doing
   right now.
-- **Answer without switching tabs.** Click a chip to read the bottom of the agent's screen, send
+- **Answer without switching tabs.** Click an agent to read the bottom of the agent's screen, send
   it a message, or pick an answer to its question or permission prompt right on the card.
 - **Works with any agent.** It reads Herdr's own status reports, refined by the agent's child
   processes and its repo's file changes. No hooks or setup per agent.
@@ -33,7 +33,7 @@ without opening a single tab.
 - **Seven themes**, or write your own in a few lines of JSON.
 
 <p align="center">
-  <img src="preview.png" alt="A card open beside an agent's chip" width="100%">
+  <img src="preview.png" alt="A card open beside its agent" width="100%">
 </p>
 
 ## Reading the board
@@ -44,7 +44,7 @@ without opening a single tab.
 | **PCH** | running a command |
 | **NIC** | running a network command (`curl`, `gh`, `git`, `ssh`, …) |
 | **NVMe** | changing files in its repo |
-| **PCIe** | running sub-agents (each gets its own chip in a slot) |
+| **PCIe** | running sub-agents (each gets its own slot) |
 | **BIOS** | waiting for your permission |
 | **F_PANEL** | asking you a question |
 | **TPM** | waiting for a login |
@@ -52,9 +52,9 @@ without opening a single tab.
 | **POST** | done while you were away |
 | **RAM** | idle |
 
-Hover a chip for its card. Click it to keep the card open, then expand **Message agent** to see
+Hover an agent for its card. Click it to keep the card open, then expand **Message agent** to see
 the agent's screen and type to it. When it's blocked, its choices appear as buttons (or press
-`1`–`9`). Double-click a chip to go to its terminal.
+`1`–`9`). Double-click an agent to go to its terminal.
 
 ## Views
 
@@ -65,7 +65,7 @@ the agent's screen and type to it. When it's blocked, its choices appear as butt
   </tr>
   <tr>
     <td width="50%"><img src="docs/overview.png" alt="All machines overview"><br><b>All machines</b>: one card per machine, over ssh too.</td>
-    <td width="50%"><img src="docs/board.png" alt="Board view"><br><b>Board</b>: name chips by space or address, with a list of every agent on the right.</td>
+    <td width="50%"><img src="docs/board.png" alt="Board view"><br><b>Board</b>: name agents by space or address, with a list of every agent on the right.</td>
   </tr>
 </table>
 
@@ -103,9 +103,9 @@ Or let an agent do it: point an agent working in Herdr at this repo and ask it t
 | `cmd-shift-m` / `ctrl-shift-m` | open or close the board as a window |
 | `cmd-alt-m` / `alt-shift-m` | open it as a pane to the right |
 | `v` · `l` · `m` | view, labels and motion menus |
-| `n` · `c` · `t` | chip names, next theme, log |
+| `n` · `c` · `t` | agent names, next theme, log |
 | `a` · `f` · `s` | all machines, spaces menu, this space only |
-| `←` `→` · `r` · Enter | select a chip, open its card, go to it |
+| `←` `→` · `r` · Enter | select an agent, open its card, go to it |
 | `1`–`9` | answer a blocked agent from its card |
 | `d` · `?` · Esc | demo, legend, close |
 

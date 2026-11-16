@@ -34,12 +34,12 @@ export const ROLES = {
   working: ["working", "working counts"],
   card: ["popover", "hover cards and menus"],
   cardLine: ["border", "hover card and menu borders"],
-  chipBg: [null, "one color for every agent chip (unset: color chips by program)"],
-  chipFg: ["#11111b", "chip text"],
-  chipRing: [null, "chip outline (unset: none)"],
+  agentBg: [null, "one color for every agent (unset: color agents by program)"],
+  agentFg: ["#11111b", "agent text"],
+  agentRing: [null, "agent outline (unset: none)"],
 };
 
-/** Chip colors by program key (matched against the program and app names); "other" for the rest. */
+/** Agent colors by program key (matched against the program and app names); "other" for the rest. */
 export const PROGRAMS = {
   claude: "#e0896b", codex: "#c9d1e3", opencode: "#f2c46d", pi: "#a99bf5", cursor: "#8fd3c9",
   gemini: "#8ab4f8", kiro: "#b8e986", amp: "#f5a3c7", other: "#b4befe",
@@ -103,10 +103,10 @@ export function palette(id, defs, active, herdrThemes = () => []) {
 
 /** A chip's background and text color under a palette. */
 export function chipColors(r, P) {
-  if (P.chipBg) return { bg: P.chipBg, fg: P.chipFg };
+  if (P.agentBg) return { bg: P.agentBg, fg: P.agentFg };
   const k = `${r.program?.key ?? ""} ${r.app ?? ""}`.toLowerCase();
   const hit = Object.keys(P.programs).find((n) => n !== "other" && k.includes(n));
-  return { bg: P.programs[hit ?? "other"], fg: P.chipFg };
+  return { bg: P.programs[hit ?? "other"], fg: P.agentFg };
 }
 
 /** A palette written out as a standalone theme file (every role as a concrete color). */

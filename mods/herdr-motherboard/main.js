@@ -844,7 +844,7 @@ export default class Motherboard extends View {
       // so waiting for the click let the hover card close and a new one open.
       .on_mouse_down("left", (e, cx) => { this.press(e, cx); this.pinAgent(r, cx); cx.notify(); })
       .on_click((e, cx) => { if (e.click_count >= 2) { this.focusAgent(r); cx.notify(); } });
-    if (P.chipRing) e = e.border_1().border_color(P.chipRing);
+    if (P.agentRing) e = e.border_1().border_color(P.agentRing);
     if ((r.status === "idle" || !r.status) && this.hover !== r.address) e = e.opacity(0.5);
     if (r.status === "blocked") e = e.border_2().border_color(P.bios);
     if (r.status === "error") e = e.border_2().border_color(P.fault);
@@ -888,8 +888,8 @@ export default class Motherboard extends View {
         .child(rule())
         .child(h_flex().px(6).py(2).gap(6).items_center().child(div().flex_1().text_color(P.muted).child("scope span"))
           .children(SPANS.map((ms) => this.btn(`span-${ms}`, spanLabel(ms), P, () => save({ span: ms }), S.span === ms, 3)))),
-      labels: choice("labels", "LABELS", [["hover", "a card when you point at a chip"], ["short", "space and activity under each chip"], ["full", "plus a list of every agent"], ["off", "nothing extra"]]),
-      motion: choice("motion", "MOTION", [["full", "chips walk the buses, trails light up"], ["reduced", "chips slide straight there"], ["off", "chips jump"]]),
+      labels: choice("labels", "LABELS", [["hover", "a card when you point at an agent"], ["short", "space and activity under each agent"], ["full", "plus a list of every agent"], ["off", "nothing extra"]]),
+      motion: choice("motion", "MOTION", [["full", "agents walk the buses, trails light up"], ["reduced", "agents slide straight there"], ["off", "agents jump"]]),
       spaces: () => {
         const cur = focused()?.space;
         const sel = S.spaces;
@@ -946,9 +946,9 @@ export default class Motherboard extends View {
           .child(div().text_size(10.5).text_color(P.dim).pb(2).child("LEGEND · keys: v view · n names · l labels · m motion · z size · d demo · a all machines · r open a card · 1–9 answer · c f s t ← → ⏎ esc"))
           .children(rows.map(([l, role, d]) => h_flex().gap(10).items_start().child(div().w(64).flex_none().font_weight(700).text_color(P[role]).child(l)).child(div().flex_1().min_w(0).text_color(P.muted).child(d))))
           .child(h_flex().gap(10).items_start().pt(4).mt(2).border_t(1).border_color(P.line)
-            .child(div().w(64).flex_none().child(div().relative().w(34).pl(8).pr(4).rounded(3).bg(P.programs.claude ?? P.lit).text_color(P.chipFg).font_weight(700).child("t1")
+            .child(div().w(64).flex_none().child(div().relative().w(34).pl(8).pr(4).rounded(3).bg(P.programs.claude ?? P.lit).text_color(P.agentFg).font_weight(700).child("t1")
               .child(div().absolute().left(0).top(0).bottom(0).w(4).rounded_l(3).bg(MARK.ansi6))))
-            .child(div().flex_1().min_w(0).text_color(P.muted).child("chip: its space's name (or its terminal's address). Its color is the program; the stripe is its space's color, as in the sidebar.")));
+            .child(div().flex_1().min_w(0).text_color(P.muted).child("agent: its space's name (or its terminal's address). Its color is the program; the stripe is its space's color, as in the sidebar.")));
       },
     };
   }
@@ -1187,7 +1187,7 @@ export default class Motherboard extends View {
       .child(h_flex().flex_none().mt(6).gap(6).items_center()
         .child(this.btn("pin-go", "Go to it", P, () => this.focusAgent(r)))
         .child(div().flex_1().flex().justify_end().text_size(10.5).text_color(P.dim)
-          .child([open && blocked && prompt && !ans ? "1–9 pick" : open && this.canType(r) ? "⏎ send" : null, kept ? "esc close" : "click its chip to keep it open"].filter(Boolean).join(" · "))))
+          .child([open && blocked && prompt && !ans ? "1–9 pick" : open && this.canType(r) ? "⏎ send" : null, kept ? "esc close" : "click the agent to keep this open"].filter(Boolean).join(" · "))))
       .when(open, (e) => e.child(div().id("card-size").absolute().right(0).bottom(0).w(16).h(16).cursor_nwse_resize().flex().items_end().justify_end().pr(2)
         .text_size(10).line_height("10px").text_color(P.dim).child("◢")
         .on_mouse_down("left", (ev, cx) => this.startCardDrag("size", ev, cx))));
@@ -1205,7 +1205,7 @@ export default class Motherboard extends View {
       .on_hover((h, cx) => { this.selAddr = h ? r.address : this.selAddr === r.address ? null : this.selAddr; cx.notify(); })
       .on_mouse_down("left", this.press)
       .on_click((e, cx) => { if (e.click_count >= 2) this.focusAgent(r); else this.pinAgent(r, cx); cx.notify(); })
-      .child(div().w(bySpace ? 64 : 40).flex_none().flex().justify_center().rounded(3).bg(chipColors(r, P).bg).text_color(P.chipFg).font_weight(700).whitespace_nowrap().overflow_hidden().child(name))
+      .child(div().w(bySpace ? 64 : 40).flex_none().flex().justify_center().rounded(3).bg(chipColors(r, P).bg).text_color(P.agentFg).font_weight(700).whitespace_nowrap().overflow_hidden().child(name))
       .child(v_flex().flex_1().min_w(0).text_size(11.5)
         .child(h_flex().justify_between().gap(6)
           .child(h_flex().gap(5).items_center().min_w(0).when(!!r.space, (e) => e.child(this.avatar(r, 13))).child(div().truncate().child(`${bySpace ? r.label : r.space ?? ""}${r.remote ? " · " + r.machine : ""}`)))
@@ -1359,7 +1359,7 @@ export default class Motherboard extends View {
       if (r.status === "working") dot = dot.loop("opacity", { from: 0.3, to: 1, period: 1100 });
       if (r.status === "blocked") dot = dot.loop("opacity", { from: 0.1, to: 1, period: 500 });
       return div().id(`mini-${r.address}`).relative().pl(7).pr(5).rounded(3).bg(chipColors(r, P).bg)
-        .child(div().absolute().left(0).top(0).bottom(0).w(3).rounded_l(3).bg(this.spaceTint(r))).text_color(P.chipFg).text_size(11).font_weight(r.parent ? 600 : 700)
+        .child(div().absolute().left(0).top(0).bottom(0).w(3).rounded_l(3).bg(this.spaceTint(r))).text_color(P.agentFg).text_size(11).font_weight(r.parent ? 600 : 700)
         .opacity(r.status === "idle" || !r.status ? 0.55 : 1)
         .when(r.status === "blocked", (e) => e.border_1().border_color(P.bios))
         .cursor_pointer().tooltip(`${r.label} · ${r.space ?? "no space"} · ${r.title || r.program?.name || "agent"}\n${activity(r)}`)
