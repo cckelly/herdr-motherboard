@@ -190,11 +190,16 @@ corner: working pulses, blocked blinks red, done green, idle grey.
     answer in its card;
   - Herdr's own `windows.json`, for where its window was;
   - `scutil` (macOS), `hostnamectl` or `hostname` for the computer's name;
-  - `open` / `xdg-open` / `explorer` / `notepad` only when you pick "Open themes folder" or
-    "Copy to a new theme".
+  - `open` / `xdg-open` / `explorer` / `notepad` only when you pick "Open your themes folder" or
+    "Copy to a new theme";
+  - Herdr's data folder for this mod: it creates `data/herdr-motherboard/themes/` and reads
+    the person's themes there; it writes there only for "Copy to a new theme".
   - No network access of its own. If a command is missing, it places agents by Herdr state.
-- **Themes:** each `themes/*.json` is a theme (`herdr`, `phosphor`, `amber`, `blueprint`,
-  `solder-mask`, `synthwave`, `datasheet` ship). Values are hex or Herdr color names; a theme
+- **Themes:** each `themes/*.json` in the mod is a shipped theme (`herdr`, `phosphor`, `amber`,
+  `blueprint`, `solder-mask`, `synthwave`, `datasheet`); the person's own are `*.json` in
+  `${appHome()}/data/herdr-motherboard/themes/` (created on start), so an update that
+  replaces the mod folder keeps them. One of theirs with a shipped id wins; the menu marks
+  theirs "yours". Both folders are watched. Values are hex or Herdr color names; a theme
   can `extends` another or borrow a Herdr theme with `herdrTheme`. `themes/README.md` lists
   all 31 roles. Edits apply on save.
 
@@ -270,5 +275,5 @@ corner: working pulses, blocked blinks red, done green, idle grey.
   then 4 ("Type something.") and "Purple" makes it say "you answered "Purple"".
 - `iso` and `scope` render the same agents; hovering a scope stretch shows its component,
   duration and times.
-- Saving a new `themes/*.json` adds it to the theme menu without a reload; a broken one is
+- Saving a new theme file in either folder adds it to the theme menu without a reload; a broken one is
   listed there with the reason.

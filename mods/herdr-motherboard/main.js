@@ -80,6 +80,8 @@ const machineKey = (r) => r.machine ?? "local";
 /** A scrolling popover. `overflow_y_scrollbar` drops `absolute()`, so a plain box does the placing. */
 const floating = (left, top, w, h, list) => div().absolute().left(left).top(top).w(w).h(h).child(list.size_full().overflow_y_scrollbar());
 const THEME_DIR = () => `${appHome()}/mods/${MOD}/themes`;
+/** The person's own themes: in Herdr's data folder for this mod, so updating the mod leaves them alone. */
+const USER_THEME_DIR = () => `${appHome()}/data/${MOD}/themes`;
 const BUILTIN = () => new Map([[DEFAULT_THEME, { id: DEFAULT_THEME, name: "Herdr", colors: {}, programs: {} }]]);
 /** The overview's component cells, in board order. */
 const CELLS = [["cpu0", "CPU", "cpu"], ["pch", "PCH", "pch"], ["nic", "NIC", "nic"], ["nvme", "NVMe", "nvme"], ["gpu", "PCIe", "gpu"], ["alert", "NEEDS YOU", "bios"], ["fault", "FAULT", "fault"], ["post", "POST", "post"], ["ram", "RAM", "ram"]];
@@ -130,13 +132,18 @@ export default class Motherboard extends View {
     this.themeDefs = BUILTIN();
     this.themeErrors = [];
     this.themeRev = 0;
-    cx.spawn(async (cx) => {
-      for (;;) {
-        await this.loadThemes();
-        cx.notify();
-        try { await watchFolder(THEME_DIR()); } catch (_e) { return; }
-      }
-    });
+    this.userThemes = new Set();
+    // Both theme folders reload on any change; the shipped one only changes when the mod does.
+    for (const dir of [THEME_DIR, USER_THEME_DIR]) {
+      cx.spawn(async (cx) => {
+        if (dir === USER_THEME_DIR) await fs.mkdir(USER_THEME_DIR(), { recursive: true }).catch(() => {});
+        for (;;) {
+          await this.loadThemes();
+          cx.notify();
+          try { await watchFolder(dir()); } catch (_e) { return; }
+        }
+      });
+    }
     cx.spawn(async (cx) => {
       for (const [cmd, args] of nameCommands(PLATFORM)) {
         try {
@@ -932,10 +939,10 @@ export default class Motherboard extends View {
         const cur = this.themeDefs.has(S.theme) ? S.theme : DEFAULT_THEME;
         return scroll(320, 76 + (ids.length + 2) * 26 + notes.length * 52, this.menuBox("menu-themes", P).p(6).gap(2)
           .child(title("THEME"))
-          .children(ids.map((id) => item(`th-${id}`, this.themeDefs.get(id).name, `${id}.json`, id === cur, () => { save({ theme: id }); this.menu = null; }, 110)))
+          .children(ids.map((id) => item(`th-${id}`, this.themeDefs.get(id).name, this.userThemes.has(id) ? `yours · ${id}.json` : `${id}.json`, id === cur, () => { save({ theme: id }); this.menu = null; }, 110)))
           .child(rule())
           .child(item("th-copy", "Copy to a new theme", "", false, () => this.copyTheme(P), 200))
-          .child(item("th-dir", "Open themes folder", "", false, () => { const [cmd, args] = openCommand(PLATFORM, THEME_DIR()); exec(cmd, args).catch(() => {}); }, 200))
+          .child(item("th-dir", "Open your themes folder", "", false, () => { const [cmd, args] = openCommand(PLATFORM, USER_THEME_DIR()); exec(cmd, args).catch(() => {}); }, 200))
           .children(notes.map((n) => div().px(4).py(2).text_size(11).text_color(P.bios).child("⚠ " + n))));
       },
       legend: () => {
@@ -1308,15 +1315,19 @@ export default class Motherboard extends View {
   /* ---------------- themes ---------------- */
 
   /** Reads every themes/*.json. A file that fails keeps the board running and is listed in the theme menu. */
+  /** The shipped themes, then the person's own (one of theirs with a shipped theme's id wins). */
   async loadThemes() {
-    const defs = BUILTIN(), errors = [];
-    let names = [];
-    try { names = (await fs.readdir(THEME_DIR())).filter((n) => n.endsWith(".json")); } catch (e) { errors.push(`themes folder: ${e.message ?? e}`); }
-    for (const n of names) {
-      const id = n.slice(0, -5);
-      try { defs.set(id, parseTheme(id, await fs.readFile(`${THEME_DIR()}/${n}`, "utf8"))); } catch (e) { errors.push(`${n}: ${e.message ?? e}`); }
+    const defs = BUILTIN(), errors = [], mine = new Set();
+    for (const [dir, user] of [[THEME_DIR(), false], [USER_THEME_DIR(), true]]) {
+      let names = [];
+      try { names = (await fs.readdir(dir)).filter((n) => n.endsWith(".json")); } catch (e) { if (!user) errors.push(`themes folder: ${e.message ?? e}`); }
+      for (const n of names) {
+        const id = n.slice(0, -5);
+        try { defs.set(id, parseTheme(id, await fs.readFile(`${dir}/${n}`, "utf8"))); if (user) mine.add(id); } catch (e) { errors.push(`${user ? "your " : ""}${n}: ${e.message ?? e}`); }
+      }
     }
     this.themeDefs = defs;
+    this.userThemes = mine;
     this.themeErrors = errors;
     this.themeRev++;
   }
@@ -1326,8 +1337,9 @@ export default class Motherboard extends View {
     const base = settings().theme;
     let id = `${base}-copy`;
     for (let i = 2; this.themeDefs.has(id); i++) id = `${base}-copy-${i}`;
-    const file = `${THEME_DIR()}/${id}.json`;
+    const file = `${USER_THEME_DIR()}/${id}.json`;
     try {
+      await fs.mkdir(USER_THEME_DIR(), { recursive: true });
       await writeTextFile(file, themeFile(`${this.themeDefs.get(base)?.name ?? base} copy`, P), null);
       await this.loadThemes();
       save({ theme: id });

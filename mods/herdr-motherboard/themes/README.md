@@ -1,8 +1,12 @@
 # Motherboard themes
 
-Every `.json` file in this folder is a theme. The board picks it up as soon as you save
-(`theme ▾` in the header lists them; `c` cycles). A broken file is skipped, and the
-theme menu says why.
+This folder holds the themes that ship with the mod. **Put your own in
+`~/.config/herdr-app/data/herdr-motherboard/themes/`** instead (`theme ▾` → **Open your
+themes folder**): updating the mod replaces this folder but never touches that one.
+
+Every `.json` file in either folder is a theme. The board picks it up as soon as you save
+(`theme ▾` in the header lists them, yours marked "yours"; `c` cycles). One of yours with a
+shipped theme's file name replaces it. A broken file is skipped, and the theme menu says why.
 
 ```json
 {
@@ -27,8 +31,8 @@ theme menu says why.
 - **programs**: agent color per program, matched against the agent's program and app names
   (`other` is everything else). Ignored while `agentBg` is set.
 
-The theme menu's **Copy to a new theme** writes the current theme out with every role filled
-in, which is the easiest place to start.
+The theme menu's **Copy to a new theme** writes the current theme into your folder with every
+role filled in and opens it, which is the easiest place to start.
 
 | Role | Default | Paints |
 | --- | --- | --- |

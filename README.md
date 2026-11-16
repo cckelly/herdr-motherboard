@@ -82,9 +82,30 @@ the agent's screen and type to it. When it's blocked, its choices appear as butt
   </tr>
 </table>
 
-Also Herdr (the default), Blueprint and Solder Mask. **theme ▾ → Copy to a new theme** gives you
-a JSON file to edit; changes show up as you save.
-[`themes/README.md`](mods/herdr-motherboard/themes/README.md) lists every color role.
+Also Herdr (the default), Blueprint and Solder Mask.
+
+### Make your own
+
+A theme is a small JSON file. Start from any theme and change only what you want:
+
+```json
+{
+  "name": "Midnight",
+  "extends": "phosphor",
+  "colors": { "cpu": "#89b4fa", "bios": "#f38ba8" }
+}
+```
+
+1. Open the board's **theme ▾** menu and pick **Copy to a new theme**. It saves the current
+   theme with every color filled in, switches to it, and opens the file.
+2. Edit and save. The board updates as you save, with no reload.
+3. Share it by sending the file. Others drop it in their themes folder (**theme ▾ → Open your
+   themes folder**).
+
+Your themes live in `~/.config/herdr-app/data/herdr-motherboard/themes/`, outside the mod, so
+updating the mod never touches them. Colors can be hex or Herdr color names, so a theme can
+follow whatever Herdr theme you use.
+[`themes/README.md`](mods/herdr-motherboard/themes/README.md) lists every option and color role.
 
 ## Install
 
