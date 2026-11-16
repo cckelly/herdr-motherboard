@@ -1,0 +1,11 @@
+{
+  "name": "Synthwave",
+  "colors": {
+    "bg": "#12071f", "head": "#1a0b2e", "line": "#2d1650", "text": "#f5e9ff", "muted": "#c3a6e8", "dim": "#7a5aa6",
+    "frame": "#ff2bd6", "silk": "#8a5cc7", "trace": "#3d1f6e", "bus": "#00b8d4", "deco": "#2a1450", "lit": "#00fff0",
+    "cpu": "#00e5ff", "ram": "#8f7dff", "nvme": "#ff5ef0", "pch": "#36f9c5", "nic": "#7cff6b", "gpu": "#ff9f1c",
+    "bios": "#ff2e63", "panel": "#ffe14d", "tpm": "#ffb86b", "fault": "#ff2e63", "post": "#a6ff8f", "remote": "#ffe14d", "led": "#36f9c5",
+    "working": "#00fff0", "card": "#1a0b2e", "cardLine": "#ff2bd6"
+  },
+  "programs": { "claude": "#ff9e7a", "codex": "#dcd6ff", "opencode": "#ffe14d", "pi": "#c4a8ff", "other": "#7df9ff" }
+}

@@ -1,0 +1,6 @@
+{
+  "place": "none",
+  "title": "Motherboard",
+  "focusable": true,
+  "overlay": { "kind": "window", "key": "herdr-motherboard", "keep": true, "frame": "none" }
+}

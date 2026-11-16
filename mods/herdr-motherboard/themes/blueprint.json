@@ -1,0 +1,10 @@
+{
+  "name": "Blueprint",
+  "colors": {
+    "bg": "#0b2a4a", "head": "#09233e", "line": "#1c4a78", "text": "#e8f1ff", "muted": "#a9c4e6", "dim": "#6f93bd",
+    "frame": "#cfe0f7", "silk": "#8fb0d6", "trace": "#4f7bab", "bus": "#9cbbe0", "deco": "#2c5c8f", "lit": "#ffffff",
+    "cpu": "#ffffff", "ram": "#bfe0ff", "nvme": "#d4c8ff", "pch": "#a8f0ff", "nic": "#b8ffd9", "gpu": "#ffd9a8",
+    "bios": "#ff8a80", "panel": "#ffd180", "tpm": "#ffe57f", "fault": "#ff5252", "post": "#b9f6ca", "remote": "#ffe57f", "led": "#b9f6ca",
+    "working": "#ffffff", "chipBg": "#e8f1ff", "chipFg": "#0b2a4a", "card": "#0d3157", "cardLine": "#4f7bab"
+  }
+}

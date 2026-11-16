@@ -1,0 +1,11 @@
+{
+  "name": "Phosphor",
+  "scanlines": true,
+  "colors": {
+    "bg": "#030a05", "head": "#06120a", "line": "#0f2e17", "text": "#8dffa6", "muted": "#4fd16f", "dim": "#2b7a40",
+    "frame": "#1f6b34", "silk": "#22703a", "trace": "#154a24", "bus": "#1f6b34", "deco": "#123d1d", "lit": "#c8ffd4",
+    "cpu": "#5dff7f", "ram": "#3fd96a", "nvme": "#5dff7f", "pch": "#4ef08a", "nic": "#7dff9a", "gpu": "#3fd96a",
+    "bios": "#ff5f56", "panel": "#ff8a5c", "tpm": "#ffb05c", "fault": "#ff5f56", "post": "#8dffa6", "remote": "#ffd75c", "led": "#8dffa6",
+    "working": "#c8ffd4", "chipBg": "#0a2a12", "chipFg": "#b6ffc6", "chipRing": "#3fd96a", "card": "#04100a", "cardLine": "#1f6b34"
+  }
+}

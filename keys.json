@@ -1,0 +1,8 @@
+{
+  "global": {
+    "cmd-shift-m": "mod.open:herdr-motherboard",
+    "cmd-alt-m": { "command": "pane.split", "args": { "direction": "right", "mod": "herdr-motherboard" } },
+    "ctrl-shift-m": "mod.open:herdr-motherboard",
+    "alt-shift-m": { "command": "pane.split", "args": { "direction": "right", "mod": "herdr-motherboard" } }
+  }
+}

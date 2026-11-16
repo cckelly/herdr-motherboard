@@ -1,0 +1,10 @@
+{
+  "name": "Solder Mask",
+  "colors": {
+    "bg": "#0b2e1c", "head": "#082417", "line": "#164d31", "text": "#f2f2e9", "muted": "#b8c9b8", "dim": "#6f9a80",
+    "frame": "#e9e6d6", "silk": "#d8d4c0", "trace": "#2f7a4f", "bus": "#d4a94a", "deco": "#1d5e3b", "lit": "#ffd866",
+    "cpu": "#8cc4ff", "ram": "#c2b5ff", "nvme": "#ffa3d4", "pch": "#7fe8d6", "nic": "#b3ecff", "gpu": "#ffbe8a",
+    "bios": "#ff6b6b", "panel": "#ffd166", "tpm": "#f4a261", "fault": "#ff4d4d", "post": "#e9f5db", "remote": "#ffd866", "led": "#8cff9a",
+    "working": "#ffd866", "card": "#0e3a24", "cardLine": "#2f7a4f"
+  }
+}
