@@ -116,6 +116,7 @@ export default class Motherboard extends View {
     this.pathsKey = null;
     this.demo = null;
     this.demoOn = false;
+    this.demoOpen = new Set();
     this.localName = "this computer";
     this.procKind = new Map();
     this.procFail = new Map();
@@ -207,6 +208,7 @@ export default class Motherboard extends View {
       this.demoOn = !!S.demo;
       // Made-up machine names, so a demo (and a screenshot of one) shows none of yours.
       this.demo = this.demoOn ? new Demo("build-box") : null;
+      this.demoOpen = new Set();
       this.recs.clear(); this.log = []; this.fading = []; this.hover = null; this.pill.pinned = null;
       changed = true;
     }
@@ -244,6 +246,7 @@ export default class Motherboard extends View {
       for (const [k, v] of Object.entries(next)) if (r[k] !== v) { r[k] = v; changed = true; }
     };
     if (this.demoOn) {
+      if (this.pin) this.demo.hold(this.pin, now);
       this.demo.tick(now);
       for (const f of this.demo.feed()) upsert(f.address, f.info, f.term, f.obs);
     } else {
@@ -261,7 +264,7 @@ export default class Motherboard extends View {
         if (this.pin === address) this.pin = null;
         if (this.hover === address) this.hover = null;
         // An expanded card is that agent's; a later terminal with the same address starts collapsed.
-        if ((S.expanded ?? []).includes(address)) save({ expanded: settings().expanded.filter((a) => a !== address) });
+        if (!this.demoOn && (S.expanded ?? []).includes(address)) save({ expanded: settings().expanded.filter((a) => a !== address) });
         changed = true;
         continue;
       }
@@ -533,7 +536,7 @@ export default class Motherboard extends View {
     this.cardFor = addr;
     this.pinN++;
     this.msg.set_value(""); this.sent = null; this.screen = null; this.answering = null; this.pinAt = null; this.cardDrag = null; this.cardHover = false;
-    if (addr && !this.demoOn) this.watchScreen(cx, addr, this.pinN);
+    if (addr) this.watchScreen(cx, addr, this.pinN);
   }
 
   /** Closes the card, pinned or hovered. `keyboard`: hand the keyboard back (Esc, ✕), not after a press elsewhere in Herdr. */
@@ -547,15 +550,16 @@ export default class Motherboard extends View {
   hoverGone() { return !this.pin && !!this.hover && this.chipHover !== this.hover; }
 
   /** Each agent's card is collapsed unless you expanded that one. */
-  isOpen(addr) { return (settings().expanded ?? []).includes(addr); }
+  isOpen(addr) { return this.demoOn ? this.demoOpen.has(addr) : (settings().expanded ?? []).includes(addr); }
   toggleOpen(addr) {
+    // Demo agents reuse real addresses (t1…), so their cards remember in memory, not in settings.
+    if (this.demoOn) { if (!this.demoOpen.delete(addr)) this.demoOpen.add(addr); return; }
     const keep = (settings().expanded ?? []).filter((a) => a !== addr && this.recs.has(a));
     save({ expanded: this.isOpen(addr) ? keep : [...keep, addr] });
   }
 
-  /** Whether the box can take text: not in demo, and when blocked only as an answer (see sendMsg). */
+  /** Whether the box can take text: when blocked, only as an answer (see sendMsg). */
   canType(r) {
-    if (this.demoOn) return false;
     if (r.status !== "blocked" || this.answering?.addr === r.address) return true;
     if (this.justAnswered(r.address)) return false;
     const scr = this.screen?.addr === r.address ? this.screen : null;
@@ -598,8 +602,9 @@ export default class Motherboard extends View {
   /** Whether an answer to this agent is on its way. */
   busy(addr) { return this.sent?.addr === addr && this.sent.state === "sending"; }
 
-  /** The agent's screen as text, or null when it can't be read. */
+  /** The agent's screen as text, or null when it can't be read. Demo agents draw their own. */
   async readScreen(addr) {
+    if (this.demoOn) return this.demo?.read(addr) ?? null;
     try {
       const res = await hc(["read", "--json", "--", addr]);
       if (res.code === 0) return JSON.parse(res.stdout).text ?? "";
@@ -607,8 +612,9 @@ export default class Motherboard extends View {
     return null;
   }
 
-  /** Runs one hc command for the card; returns why it failed, or null. */
+  /** Runs one hc command for the card; returns why it failed, or null. Demo agents take it themselves. */
   async hcStep(args) {
+    if (this.demoOn) return this.demo ? this.demo.input(args) : "demo is off";
     let res;
     try { res = await hc(args); } catch (e) { res = { code: 1, stdout: "", stderr: String(e) }; }
     return sendError(res);
@@ -630,7 +636,7 @@ export default class Motherboard extends View {
   answerOption(r, o, cx) {
     const shown = this.promptOf(r);
     const addr = r.address;
-    if (!shown || this.demoOn || this.busy(addr)) return;
+    if (!shown || this.busy(addr)) return;
     if (o.typed) { this.answering = { addr, n: o.n, label: o.label, shown }; this.msg.set_value(""); cx.timer.after(30, () => this.msg.focus()); return; }
     // Shown at once: the choice lights up and the others stop taking clicks until it's done.
     this.sent = { addr, state: "sending", text: `${o.n}. ${o.label}`, verb: "Picked", n: o.n };
@@ -1125,9 +1131,9 @@ export default class Motherboard extends View {
    */
   compose(card, r, P) {
     const scr = this.screen?.addr === r.address ? this.screen : null;
-    const lines = this.demoOn ? ["(a demo agent has no screen)"] : !scr ? ["reading its screen…"] : scr.lines == null ? ["(can't read its screen)"] : scr.lines.length ? scr.lines : ["(its screen is empty)"];
+    const lines = !scr ? ["reading its screen…"] : scr.lines == null ? ["(can't read its screen)"] : scr.lines.length ? scr.lines : ["(its screen is empty)"];
     const sent = this.sent?.addr === r.address ? this.sent : null;
-    const blocked = r.status === "blocked" && !this.demoOn;
+    const blocked = r.status === "blocked";
     const prompt = this.promptOf(r);
     const ans = this.answering?.addr === r.address ? this.answering : null;
     const asks = r.kind === "question" ? "It asked you a question" : r.kind === "auth" ? "It needs you to log in" : "It's asking for your permission";
@@ -1148,9 +1154,7 @@ export default class Motherboard extends View {
       .child(div().flex_1().min_w(0).truncate().text_color(P.text).child(o.label));
     };
     let lower;
-    if (this.demoOn) lower = div().flex_none().px(8).py(6).rounded(5).border_1().border_color(P.cardLine).text_size(11.5).text_color(P.dim)
-      .child("Demo agents can't take messages. Press d to turn demo off.");
-    else if (!blocked) lower = input();
+    if (!blocked) lower = input();
     else {
       // Its own question when the screen has one; else what it told Herdr.
       const q = prompt?.question ?? r.msg;

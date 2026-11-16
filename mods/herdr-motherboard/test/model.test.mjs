@@ -99,6 +99,38 @@ test("demo mode keeps 7 agents moving through every state", async () => {
   assert.ok(d.feed().every((x) => x.term.report.state));
 });
 
+test("a blocked demo agent draws a prompt the card can answer", async () => {
+  const { Demo } = await import("../demo.js");
+  const d = new Demo("box");
+  const a = d.agents.find((x) => x.status === "blocked");
+  const p = promptOptions(d.read(a.address));
+  assert.equal(p.question, "Do you want to proceed?");
+  assert.deepEqual(p.options.map((o) => o.n), [1, 2, 3]);
+  assert.match(p.above, /rotate\.sql/);
+  assert.equal(d.input(["send", "--json", "--", a.address, "hi"]), "it's waiting on a prompt");
+  assert.equal(d.input(["keys", "--json", a.address, "1"]), null);
+  assert.equal(a.status, "working");
+  assert.equal(promptOptions(d.read(a.address)), null);
+});
+
+test("a demo agent takes a typed answer and a message", async () => {
+  const { Demo } = await import("../demo.js");
+  const d = new Demo("box");
+  const a = d.agents.find((x) => x.status === "working" && !x.parent);
+  d.block(a, "question", Date.now());
+  const p = promptOptions(d.read(a.address));
+  const typed = p.options.find((o) => o.typed);
+  assert.ok(typed);
+  d.input(["keys", "--json", a.address, String(typed.n)]);
+  assert.equal(promptOptions(d.read(a.address)), null);
+  assert.equal(d.input(["send", "--json", "--force", "--", a.address, "Per team"]), null);
+  assert.equal(a.status, "working");
+  assert.match(d.read(a.address), /Per team/);
+  d.input(["send", "--json", "--", a.address, "Also add a test"]);
+  assert.match(d.read(a.address), /> Also add a test/);
+  assert.equal(d.input(["send", "--json", "--", "nobody", "x"]), "that demo agent has gone");
+});
+
 test("screenTail keeps the last lines with text, without rules", () => {
   const screen = "one\n\n  two  \n────────\n❯ \n\ttab\n╭──╮\n";
   assert.deepEqual(screenTail(screen), ["one", "  two", "❯", "  tab"]);

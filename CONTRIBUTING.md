@@ -32,7 +32,8 @@ the script replaces that copy with yours. Herdr loads a symlinked mod but doesn'
 which is why it copies.
 
 Open the board with `cmd-shift-m` (`ctrl-shift-m` off macOS). Turn on `demo` in its header for
-seven simulated agents, or run the pretend agent in a Herdr tab to try messaging and answering:
+seven simulated agents, which you can also message and answer (`demo.js` plays their terminals).
+To try the real path through `hc`, run the pretend agent in a Herdr tab:
 
 ```sh
 node mods/herdr-motherboard/test/echo-agent.mjs

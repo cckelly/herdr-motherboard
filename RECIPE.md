@@ -126,7 +126,7 @@ corner: working pulses, blocked blinks red, done green, idle grey.
   agent redraws. A "Type something." choice opens the box: Enter presses its
   number, then pastes the answer. "Cancel it (Esc)" presses Esc there. With no menu on its
   screen, the box sends text anyway (`--force`). The screen box then shows what's above the
-  question (the command or diff being asked about). Demo agents get no box. The card stays
+  question (the command or diff being asked about). Demo agents work the same way (see Demo). The card stays
   put while the agent moves, and pressing the agent pins it where it is; drag its header to
   move it (that pins it too; double-click the header to put it back beside the agent). Every
   card opens beside its agent. Drag its corner to resize it (min 340 × 260, remembered); ✕, Esc or a press outside closes it.
@@ -144,7 +144,14 @@ corner: working pulses, blocked blinks red, done green, idle grey.
 - **Demo** (going to a demo agent shows a toast saying it needs a real terminal;
   clicking the toast turns demo off) swaps in 7 simulated agents (5 on this computer, 2 on the other machine, plus
   sub-agents) cycling through every state. Demo machines have made-up names
-  (`workstation`, `build-box`), so a screenshot shows none of the person's. Live data is untouched and returns when off.
+  (`workstation`, `build-box`), so a screenshot shows none of the person's. Each demo agent
+  keeps a made-up screen (`demo.js` `read`), and a blocked one draws a real-looking numbered
+  prompt: a permission prompt for a command, a question with choices plus "Type something.",
+  or a login. In demo the card's `hc read` / `hc keys` / `hc send` go to the simulator
+  (`demo.js` `input`), so messaging and answering work exactly as with a real agent: a pick
+  or Esc unblocks it, a message lands on its screen and puts it to work. A blocked demo agent
+  whose card is pinned waits for you; others give up after 14–22 s. Live data is untouched
+  and returns when off.
 - **Keys** (pressing any control, or opening the window, gives the board the keyboard): `v`
   view menu, `l` labels menu, `m` motion menu, `n` names, `z` size, `a` / Backspace all
   machines, `d` demo, `c` next theme, `t` log, `f` spaces menu, `s` this
@@ -270,6 +277,8 @@ corner: working pulses, blocked blinks red, done green, idle grey.
   close it.
 - An agent that starts working moves RAM → CPU along the bus with a lit trail; when it runs
   `sleep 5` it moves to the PCH and the log says "running sleep".
+- In demo, pinning the blocked agent (infra) shows its permission prompt as buttons; picking
+  "1. Yes" sends it back to the CPU and its screen says it ran the command.
 - Demo shows 7 agents across two machines, sub-agents in PCIe, and a blocked agent pulsing
   in BIOS; All machines shows one card per machine and each card opens its board.
 - Clicking the echo agent pins its card with its screen; typing "hi" and Enter makes it

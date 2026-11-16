@@ -22,19 +22,29 @@ it runs a command, it moves to the **PCH**. When it needs your permission, it la
 **BIOS** and pulses until you answer. You can tell what a dozen agents are doing at a glance,
 without opening a single tab.
 
+- **Talk to your agents without switching tabs.** Click an agent to read its screen, send it a
+  message, or answer its question or permission prompt right on the card.
 - **See everything at once.** One board per machine, every agent on it, with what each is doing
   right now.
-- **Answer without switching tabs.** Click an agent to read the bottom of the agent's screen, send
-  it a message, or pick an answer to its question or permission prompt right on the card.
 - **Works with any agent.** It reads Herdr's own status reports, refined by the agent's child
   processes and its repo's file changes. No hooks or setup per agent.
 - **Four ways to look at it.** The flat board, a 3D ASCII board, a logic-analyzer timeline,
   and an overview of every machine you're connected to.
 - **Seven themes**, or write your own in a few lines of JSON.
 
+## Talk to your agents
+
+When an agent needs you, its card shows exactly what it's asking, with its choices as buttons.
+Pick one and it goes straight back to work. Or just send it a message.
+
 <p align="center">
-  <img src="preview.png" alt="A card open beside its agent" width="100%">
+  <img src="docs/talk.gif" alt="Answering an agent's permission prompt, then messaging it, from its card" width="100%">
 </p>
+
+Hover an agent for its card. Click it to keep the card open, then expand **Message agent** to see
+the agent's screen and type to it. When it's blocked, its choices appear as buttons (or press
+`1`–`9`). Double-click an agent to go to its terminal. Try it in demo mode: the simulated agents
+take messages and answers too.
 
 ## Reading the board
 
@@ -52,15 +62,11 @@ without opening a single tab.
 | **POST** | done while you were away |
 | **RAM** | idle |
 
-Hover an agent for its card. Click it to keep the card open, then expand **Message agent** to see
-the agent's screen and type to it. When it's blocked, its choices appear as buttons (or press
-`1`–`9`). Double-click an agent to go to its terminal.
-
 ## Views
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/iso.png" alt="3D ASCII view"><br><b>Iso</b>: the same board in 3D ASCII.</td>
+    <td width="50%"><img src="docs/iso.gif" alt="3D ASCII view"><br><b>Iso</b>: the same board in 3D ASCII.</td>
     <td width="50%"><img src="docs/scope.png" alt="Logic-analyzer view"><br><b>Scope</b>: a logic-analyzer trace of where each agent has been.</td>
   </tr>
   <tr>
@@ -132,7 +138,8 @@ Or let an agent do it: point an agent working in Herdr at this repo and ask it t
 
 ## Try it
 
-- **Demo:** click `demo` in the header for seven simulated agents across two machines.
+- **Demo:** click `demo` in the header for seven simulated agents across two machines. They
+  have screens and prompts too, so you can message them and answer their questions.
 - **A pretend agent:** run `node mods/herdr-motherboard/test/echo-agent.mjs` in a Herdr tab. It
   echoes what you send it. Send `ask` for a question or `allow` for a permission prompt, then
   answer from its card.
