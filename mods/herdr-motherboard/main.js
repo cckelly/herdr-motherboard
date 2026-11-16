@@ -489,6 +489,9 @@ export default class Motherboard extends View {
    * number when another agent shares the space ("herdr 3"). By address: its terminal address
    * ("t3"). Sub-agents keep their address: they share their parent's space and tab.
    */
+  /** Whether this agent goes by its space's name (names: space), so cards and rows don't show its address. */
+  showsSpace(r, S = settings()) { return S.names === "space" && !r.parent && !!r.space; }
+
   chipName(r, S = settings()) {
     if (S.names !== "space" || r.parent || !r.space) return r.label.length < 5 ? r.label : r.label.slice(0, 4);
     const shared = [...this.recs.values()].some((x) => x !== r && !x.parent && x.spaceId === r.spaceId);
@@ -1047,7 +1050,7 @@ export default class Motherboard extends View {
           .child(this.avatar(r, 14))
           .child(div().px(4).rounded(3).bg(bg).text_color(fg).font_weight(700).whitespace_nowrap().child(this.chipName(r, S)))
           .child(v_flex().flex_1().min_w(0).text_size(10.5).line_height("13px")
-            .child(div().truncate().text_color(P.text).child(r.parent ? r.title || "sub-agent" : S.names === "space" && r.space ? r.label : r.space ?? r.tab ?? "—"))
+            .child(div().truncate().text_color(P.text).child(r.parent ? r.title || "sub-agent" : this.showsSpace(r, S) ? r.program?.name ?? r.app ?? "agent" : r.space ?? r.tab ?? "—"))
             .child(div().truncate().text_color(st).child(r.status ?? "no status"))))
         .children(runEls(wv.hi, 0)).children(runEls(wv.lo, ch)).children(tips)
         .when(!!cur, (e) => e.child(div().absolute().left((LW + cols) * cw + 2).top(level(cur) === 1 ? ch + 2 : 2).w(cw * 0.7).h(ch - 4).rounded(1)
@@ -1092,14 +1095,14 @@ export default class Motherboard extends View {
       .child(h_flex().id("card-head").flex_none().justify_between().gap(10)
         .when(pinned, (e) => e.cursor_grab().on_mouse_down("left", (ev, cx) => this.startCardDrag("move", ev, cx))
           .on_click((ev, cx) => { if (ev.click_count >= 2) { this.pinAt = null; cx.notify(); } }))
-        .child(div().font_weight(700).child(`${r.label} · ${r.program?.name ?? r.app ?? "agent"}`))
+        .child(div().font_weight(700).child(this.showsSpace(r) ? r.program?.name ?? r.app ?? "agent" : `${r.label} · ${r.program?.name ?? r.app ?? "agent"}`))
         .child(h_flex().gap(8).items_center()
           .child(div().text_color(st).child(`${r.status ?? "no status"} ${fmtDur(Date.now() - r.since)}`))
           .when(pinned, (e) => e.child(div().id("pin-close").px(4).rounded(3).text_color(P.dim).cursor_pointer().hover((x) => x.text_color(P.text).bg(P.head))
             .on_mouse_down("left", this.press).on_click((_e, cx) => { this.closeCard(true); cx.notify(); }).child("✕")))))
       .child(h_flex().flex_none().gap(6).items_center().min_w(0)
         .when(!!r.space, (e) => e.child(this.avatar(r, 15)).child(div().flex_none().text_color(P.text).child(r.space)).child(div().text_color(P.dim).child("·")))
-        .child(div().truncate().text_color(P.muted).child(`${r.remote ? r.machine : this.demoOn ? DEMO_HERE : this.localName}${parent ? ` · sub-agent of ${parent.label}` : ""}`)))
+        .child(div().truncate().text_color(P.muted).child(`${r.remote ? r.machine : this.demoOn ? DEMO_HERE : this.localName}${parent ? ` · sub-agent of ${this.chipName(parent)}` : ""}`)))
       .when(!!r.title, (e) => e.child(line(r.title, P.text, (x) => x.font_weight(600))))
       .when(!!r.msg, (e) => e.child(line(`"${r.msg}"`, P.muted, (x) => x.italic())))
       .child(line(`▸ ${r.status ? activity(r) : "hasn't reported a status to Herdr yet"}`, P.lit))
@@ -1204,8 +1207,9 @@ export default class Motherboard extends View {
     const st = { working: P.working, blocked: P.bios, done: P.post, error: P.fault }[r.status] ?? P.dim;
     // Selected: the agent whose card is open (clicked, or its chip hovered): a tint and a bar on the left.
     const sel = this.cardFor === r.address;
-    // The badge reads like the agent's chip (names: space or address); the line beside it gives the other.
-    const name = this.chipName(r), bySpace = name !== r.label.slice(0, 4);
+    // The badge reads like the agent on the board. Beside it: its space, or with names: space its
+    // program, so a board never mixes addresses and space names.
+    const name = this.chipName(r), bySpace = this.showsSpace(r);
     return h_flex().id(`row-${r.address}`).relative().gap(8).px(10).py(6).items_start().cursor_pointer()
       .when(sel, (e) => e.bg(alpha(P.lit, "1c")).child(div().absolute().left(0).top(0).bottom(0).w(3).bg(P.lit)))
       .hover((e) => e.bg(alpha(P.lit, sel ? "2c" : "14")))
@@ -1215,7 +1219,7 @@ export default class Motherboard extends View {
       .child(div().w(bySpace ? 64 : 40).flex_none().flex().justify_center().rounded(3).bg(chipColors(r, P).bg).text_color(P.agentFg).font_weight(700).whitespace_nowrap().overflow_hidden().child(name))
       .child(v_flex().flex_1().min_w(0).text_size(11.5)
         .child(h_flex().justify_between().gap(6)
-          .child(h_flex().gap(5).items_center().min_w(0).when(!!r.space, (e) => e.child(this.avatar(r, 13))).child(div().truncate().child(`${bySpace ? r.label : r.space ?? ""}${r.remote ? " · " + r.machine : ""}`)))
+          .child(h_flex().gap(5).items_center().min_w(0).when(!!r.space, (e) => e.child(this.avatar(r, 13))).child(div().truncate().child(`${bySpace ? r.program?.name ?? r.app ?? "agent" : r.space ?? ""}${r.remote ? " · " + r.machine : ""}`)))
           .child(div().flex_none().text_color(st).child(r.status ?? "no status")))
         .child(div().truncate().text_color(P.muted).child(r.title || "—"))
         .child(div().truncate().text_color(P.lit).child("▸ " + activity(r))));

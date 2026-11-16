@@ -1,13 +1,14 @@
 # herdr-motherboard
 
-Every agent Herdr knows about (Claude Code, Codex, OpenCode, pi, anything that reports a
-status) appears on an ASCII motherboard as a small labeled box. Agents travel along the data buses
-to the component that matches what the agent is doing: the CPU while it thinks, the PCH
-while it runs a command, the NIC for network commands, the NVMe while files change, BIOS
-when it needs your permission. One board per machine, an overview of all machines, a 3D
-ASCII view and a logic-analyzer timeline. Opens as a window or a pane, any time.
+Every agent in Herdr lives on an ASCII motherboard, moving to the CPU while it thinks, the PCH
+while it runs a command and the BIOS when it needs you. Click one to message it or answer it.
 
 ![herdr-motherboard](preview.png)
+
+Works with any agent that reports a status (Claude Code, Codex, OpenCode, pi, …). The NIC
+lights up for network commands, the NVMe while its files change. One board per machine, an
+overview of all machines, a 3D ASCII view and a logic-analyzer timeline. Opens as a window
+or a pane, any time.
 
 ## What you see
 
@@ -98,16 +99,18 @@ corner: working pulses, blocked blinks red, done green, idle grey.
 - **Hover an agent** (board and iso, unless labels is `off`): its full card opens beside it,
   once the pointer moves onto the agent (an agent sliding under a resting pointer doesn't open
   one). It's for reading: it closes the moment the pointer leaves the agent. Click the agent to
-  keep it open and use it. The card: the agent, its program,
-  status and how long, space avatar and name, machine, title, last message, what it's doing,
+  keep it open and use it. The card: its address and program
+  (just the program with `names: space`, whose space is on the next line), status and how long, space avatar and name, machine, title, last message, what it's doing,
   folder, progress, why it's in that component when the board saw something Herdr didn't
   report (a child process, file changes, a parent agent), then an arrow row, "▾ Message
   agent" (or "▾ Answer · 3 choices" in red when it's blocked), over the inline part: the
   bottom of its screen (`hc read`, every 1.2 s) and a box to message it. Collapsed by default;
   the arrow expands that one agent's card only (`expanded` in settings, forgotten when the
   agent ends). `short` prints space and activity under each agent; `full` adds a rail of every
-  agent on the right. Each row's badge reads like that agent on the board (`names`: space or address), and
-  the line beside it gives the other. Rows tint (`theme.lit` at low alpha) under the pointer to show they're
+  agent on the right. Each row's badge reads like that agent on the board (`names`: space or address); the
+  line beside it shows its space, or with `names: space` its program, so the board never
+  mixes addresses and space names (sub-agents, which share their parent's space, always go
+  by address). Rows tint (`theme.lit` at low alpha) under the pointer to show they're
   clickable, and the agent whose card is open has a stronger tint and a 3 px `theme.lit` bar
   on its left.
 - **Click an agent** (or a rail row, a scope channel, an overview mini agent; `r` for the
