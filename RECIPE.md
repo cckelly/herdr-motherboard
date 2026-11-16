@@ -1,9 +1,9 @@
-# herdr-motherboard
+# Motherboard
 
-Every agent in Herdr lives on an ASCII motherboard, moving to the CPU while it thinks, the PCH
-while it runs a command and the BIOS when it needs you. Click one to message it or answer it.
+Mission control for your AI agents, drawn as an ASCII motherboard. Watch them race to the CPU
+to think and light up the BIOS when they need you, then answer right from the board.
 
-![herdr-motherboard](preview.png)
+![Motherboard](preview.png)
 
 Works with any agent that reports a status (Claude Code, Codex, OpenCode, pi, …). The NIC
 lights up for network commands, the NVMe while its files change. One board per machine, an
