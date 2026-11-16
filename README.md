@@ -1,7 +1,7 @@
 <h1 align="center">Motherboard</h1>
 
 <p align="center">
-  <b>Mission control for your AI agents, drawn as an ASCII motherboard.</b><br>
+  <b>A mission control motherboard for your AI agents.</b><br>
   A mod for the <a href="https://herdr.dev">Herdr</a> app.
 </p>
 

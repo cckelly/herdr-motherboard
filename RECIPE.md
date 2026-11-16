@@ -1,11 +1,11 @@
 # Motherboard
 
-Mission control for your AI agents, drawn as an ASCII motherboard. Watch them race to the CPU
-to think and light up the BIOS when they need you, then answer right from the board.
+A mission control motherboard for your AI agents.
 
 ![Motherboard](preview.png)
 
-Works with any agent that reports a status (Claude Code, Codex, OpenCode, pi, …). The NIC
+Agents race to the CPU to think and light up the BIOS when they need you, and you answer
+right from the board. Works with any agent that reports a status (Claude Code, Codex, OpenCode, pi, …). The NIC
 lights up for network commands, the NVMe while its files change. One board per machine, an
 overview of all machines, a 3D ASCII view and a logic-analyzer timeline. Opens as a window
 or a pane, any time.
